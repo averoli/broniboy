@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
@@ -61,11 +61,15 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-const Profile = () => {
+const Profile = ({ firstName, secondName, updateProfile, data }) => {
+
+    useEffect (() => {
+        setInitData(initData)
+    }, [data])
 
     const initialData = {
-        firstName: ' ',
-        secondName: ' '
+        updateFirstName: ' ',
+        updateSecondName: ' '
     }
 
     const [initData, setInitData] = useState(initialData)
@@ -74,22 +78,24 @@ const Profile = () => {
 
     const classes = useStyles()
 
-
     const handleClick = () => {
         setEditing(prevState => !prevState)
     }
 
     const handleChange = (e) => {
-        console.log(e.target.name)
-        const name = e.target.name
-        const value = e.target.value
-        setInitData({[name]: value});
+        const {name, value} = e.target
+        setInitData({...initData, [name]: value});
     }
 
-    const handleClickTest = (e) => {
-        alert(e)
-    }
 
+    const handleSave = (initData) => {
+        setEditing(prevState => {
+            if (prevState === true) {
+                updateProfile && updateProfile(initData)
+            }
+            return !prevState
+        })
+    }
 
     return (
         <Paper style={{paddingLeft: '60px', paddingTop: '20px'}}>
@@ -101,7 +107,7 @@ const Profile = () => {
             <Grid container spacing={3} alignItems='center'>
                 <Grid item lg={2} xs={12}>
                     <Typography variant="h6">
-                        {initData.firstName} {initData.secondName}
+                        {firstName} {secondName}
                     </Typography>
 
                     <input accept="image/*" className={classes.input} id="icon-button-file" type="file"/>
@@ -154,7 +160,8 @@ const Profile = () => {
                                     <TextField
                                         label="Имя"
                                         id="outlined-basic"
-                                        defaultValue={initData.firstName}
+                                        defaultValue={firstName}
+                                        name='firstName'
                                         variant="outlined"
                                         size="small"
                                         fullWidth
@@ -164,7 +171,8 @@ const Profile = () => {
                                 <FormControl className={classes.formControl}>
                                     <TextField
                                         label="Фамилия"
-                                        defaultValue={initData.secondName}
+                                        defaultValue={secondName}
+                                        name='secondName'
                                         variant="outlined"
                                         size="small"
                                         fullWidth
@@ -176,7 +184,7 @@ const Profile = () => {
                     </Grid>
                 </DialogContent>
                 <DialogActions className={classes.dialogAct}>
-                    <Button autoFocus onClick={() => handleClickTest('Heello')} className={classes.button}>
+                    <Button autoFocus onClick={handleSave} className={classes.button}>
                         Сохранить
                     </Button>
                 </DialogActions>
