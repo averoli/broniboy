@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
@@ -61,15 +61,14 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-const Profile = ({ firstName, secondName, updateProfile, data }) => {
-
-    useEffect (() => {
-        setInitData(initData)
-    }, [data])
+const Profile = ({ firstName, secondName, src, updateProfile }) => {
 
     const initialData = {
         updateFirstName: ' ',
-        updateSecondName: ' '
+        updateSecondName: ' ',
+        updateSrc: '',
+        updateFile: ''
+
     }
 
     const [initData, setInitData] = useState(initialData)
@@ -88,13 +87,27 @@ const Profile = ({ firstName, secondName, updateProfile, data }) => {
     }
 
 
-    const handleSave = (initData) => {
+    const handleSave = (e) => {
         setEditing(prevState => {
             if (prevState === true) {
                 updateProfile && updateProfile(initData)
             }
             return !prevState
         })
+    }
+
+    const photoUpload = (e) => {
+        console.log(e)
+        e.preventDefault();
+        const reader = new FileReader();
+        const file = e.target.files[0];
+        reader.onloadend = () => {
+            setInitData({
+                file: file,
+                updateSrc: reader.result
+            });
+        }
+        reader.readAsDataURL(file);
     }
 
     return (
@@ -105,18 +118,17 @@ const Profile = ({ firstName, secondName, updateProfile, data }) => {
             </Box>
             <p style={{fontSize: '36px'}}>Профиль</p>
             <Grid container spacing={3} alignItems='center'>
-                <Grid item lg={2} xs={12}>
-                    <Typography variant="h6">
+                <Grid item md={2} xs={12}>
+                    <CardMedia>
+                        <input accept="image/*" className={classes.input} id="icon-button-file" type="file"/>
+                        <img src={src} alt='' className={classes.img} style={{width: '120px'}}/>
+                    </CardMedia>
+                    <Typography variant="h6" style={{marginTop: '10px'}}>
                         {firstName} {secondName}
                     </Typography>
 
-                    <input accept="image/*" className={classes.input} id="icon-button-file" type="file"/>
-                    <CardMedia>
-                        {/*<img src={img} alt='' className={classes.img}/>*/}
-                    </CardMedia>
-
                 </Grid>
-                <Grid item lg={3} xs={12}>
+                <Grid item md={3} xs={12}>
                     <Button
                         startIcon={<SettingsIcon/>}
                         onClick={handleClick}
@@ -134,7 +146,7 @@ const Profile = ({ firstName, secondName, updateProfile, data }) => {
                         </Button>
                     </div>
                 </Grid>
-                <Grid item lg={7} xs={12}>
+                <Grid item md={7} xs={12}>
                     <h2>История заказов</h2>
                     <p>Нет заказов</p>
                 </Grid>
@@ -147,7 +159,10 @@ const Profile = ({ firstName, secondName, updateProfile, data }) => {
                 <DialogContent dividers>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={3}>
-                            <input accept="image/*" className={classes.input} id="icon-button-file" type="file"/>
+                            <input accept="image/*" className={classes.input} id="icon-button-file"
+                                   type="file"
+                                   onChange={photoUpload}
+                            />
                             <label htmlFor="icon-button-file">
                                 <IconButton color="primary" aria-label="upload picture" component="span">
                                     <PhotoCamera style={{color: '#999'}}/>
