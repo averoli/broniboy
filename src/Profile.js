@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-const Profile = ({ firstName, secondName, src, updateProfile }) => {
+const Profile = ({firstName, secondName, src, updateProfile}) => {
 
     const initialData = {
         updateFirstName: ' ',
@@ -114,28 +114,30 @@ const Profile = ({ firstName, secondName, src, updateProfile }) => {
         <Paper style={{paddingLeft: '60px', paddingTop: '20px'}}>
             <Box>
                 <p style={{fontSize: '12px', color: '#999'}}>Главная / Профиль</p>
-
             </Box>
             <p style={{fontSize: '36px'}}>Профиль</p>
             <Grid container spacing={3} alignItems='center'>
                 <Grid item md={2} xs={12}>
                     <CardMedia>
-                        <input accept="image/*" className={classes.input} id="icon-button-file" type="file"/>
+                        <input accept="image/*" className={classes.input}
+                               id="icon-button-file"
+                               type="file"
+                               onChange={photoUpload}
+                        />
                         <img src={src} alt='' className={classes.img} style={{width: '120px'}}/>
                     </CardMedia>
                     <Typography variant="h6" style={{marginTop: '10px'}}>
                         {firstName} {secondName}
                     </Typography>
-
                 </Grid>
                 <Grid item md={3} xs={12}>
-                    <Button
-                        startIcon={<SettingsIcon/>}
-                        onClick={handleClick}
-                        className={classes.button}
-                    >
-                        Редактировать
-                    </Button>
+                    {/*<Button*/}
+                    {/*    startIcon={<SettingsIcon/>}*/}
+                    {/*    onClick={handleClick}*/}
+                    {/*    className={classes.button}*/}
+                    {/*>*/}
+                    {/*    Редактировать*/}
+                    {/*</Button>*/}
 
                     <div className={classes.blockIcon}>
                         <Button
@@ -149,6 +151,8 @@ const Profile = ({ firstName, secondName, src, updateProfile }) => {
                 <Grid item md={7} xs={12}>
                     <h2>История заказов</h2>
                     <p>Нет заказов</p>
+                    <p>Tra-la-la</p>
+
                 </Grid>
             </Grid>
             {isEditing &&
@@ -161,7 +165,6 @@ const Profile = ({ firstName, secondName, src, updateProfile }) => {
                         <Grid item xs={12} sm={3}>
                             <input accept="image/*" className={classes.input} id="icon-button-file"
                                    type="file"
-                                   onChange={photoUpload}
                             />
                             <label htmlFor="icon-button-file">
                                 <IconButton color="primary" aria-label="upload picture" component="span">

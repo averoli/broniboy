@@ -2,7 +2,7 @@ import './App.css';
 import Profile from "./Profile";
 import Grid from "@material-ui/core/Grid";
 import {useState} from "react";
-
+import Newprofile from "./Newprofile";
 
 
 export const Data = {
@@ -29,6 +29,8 @@ function App() {
                     secondName={data.secondName}
                     src={data.src}
                     updateProfile={updateProfile}
+                />
+                <Newprofile
                 />
             </Grid>
         </Grid>
